@@ -41,7 +41,6 @@ public class Usuario {
     }
     @Override
     public String toString() {
-    	// TODO Auto-generated method stub
     	StringBuilder sb = new StringBuilder();
     	sb.append("Id = ").append(id).append(" - ");
     	sb.append("Name = ").append(name).append(" - ");
