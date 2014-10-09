@@ -23,7 +23,7 @@ import pe.gob.fovipol.migracion.service.authentication.UsuarioService;
 public class HomeController {
 	@Autowired
 	private UsuarioService usuarioService;
-	
+	//no sabe
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
