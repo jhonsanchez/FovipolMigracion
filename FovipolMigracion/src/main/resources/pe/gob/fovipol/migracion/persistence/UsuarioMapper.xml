@@ -18,5 +18,6 @@ limitations under the License.
 
 
 <resultMap type="pe.gob.fovipol.migracion.model.Usuario" id="usuarioMap"/>
+<resultMap type="pe.gob.fovipol.migracion.model.Cliente" id="clienteMap"/>
 
 </mapper>
