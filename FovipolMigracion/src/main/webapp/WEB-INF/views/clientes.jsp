@@ -11,8 +11,7 @@
 	Aplicativo : ${myname}
 
 	<form method="POST">
-		<select name="tipo" >
-			<option value="" >Seleccione</option>
+		<select name="tipo" required >
 			<c:forEach items="${lstTibus}" var="x">
 				<option value="${x.codicl}" >${x.ciptcl}</option>
 			</c:forEach>
