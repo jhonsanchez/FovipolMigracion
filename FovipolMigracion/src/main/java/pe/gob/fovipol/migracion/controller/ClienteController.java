@@ -19,7 +19,7 @@ import pe.gob.fovipol.migracion.service.cliente.ClienteService;
 
 @Controller
 public class ClienteController {
-	
+	//MENSAJE DE PRUEBA
 	@Autowired
 	private ClienteService clienteService;
 	
