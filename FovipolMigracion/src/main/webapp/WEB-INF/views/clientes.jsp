@@ -47,7 +47,7 @@
 					</tr>
 					<c:forEach items="${lstCustomer}" var="customer">
 						<tr>
-							<td><a href="vestadocuenta?idcliente=${customer.codicl}">${customer.codicl}</a>
+							<td><a href="vestadocuenta?ccCliente=${customer.codicl}">${customer.codicl}</a>
 							</td>
 							<td>${customer.nococl}</td>
 						</tr>
