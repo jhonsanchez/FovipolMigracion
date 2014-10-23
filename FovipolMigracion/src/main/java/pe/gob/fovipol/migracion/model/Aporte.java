@@ -1,6 +1,6 @@
 package pe.gob.fovipol.migracion.model;
 
-public class Aportes {
+public class Aporte {
 	
 	private String codc;
 	private Integer anio;
@@ -17,7 +17,7 @@ public class Aportes {
 	private Double mes11;
 	private Double mes12;
 	
-	public Aportes() {
+	public Aporte() {
 		// TODO Auto-generated constructor stub
 	}
 	
