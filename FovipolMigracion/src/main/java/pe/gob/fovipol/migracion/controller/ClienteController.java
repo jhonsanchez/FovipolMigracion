@@ -1,19 +1,31 @@
 package pe.gob.fovipol.migracion.controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import pe.gob.fovipol.migracion.model.Aporte;
 import pe.gob.fovipol.migracion.model.Cliente;
 import pe.gob.fovipol.migracion.service.cliente.ClienteService;
 
@@ -22,29 +34,34 @@ public class ClienteController {
 	// MENSAJE DE PRUEBA
 	@Autowired
 	private ClienteService clienteService;
-
+	// public final static String NOMBRE = "nombresocio";
+	// public final static String CIP = "nombresocio";
+	// public final static String NOMBRE = "nombresocio";
+	// public final static String NOMBRE = "nombresocio";
+	// public final static String NOMBRE = "nombresocio";
+	// public final static String NOMBRE = "nombresocio";
 	private static final Logger logger = LoggerFactory
 			.getLogger(HomeController.class);
 
-	private String ccCliente;
-
-	public String getCcCliente() {
-		return ccCliente;
-	}
-
-	public void setCcCliente(String ccCliente) {
-		this.ccCliente = ccCliente;
-	}
-
-	private int tipo;
-
-	public int getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
-	}
+	// private String ccCliente;
+	//
+	// public String getCcCliente() {
+	// return ccCliente;
+	// }
+	//
+	// public void setCcCliente(String ccCliente) {
+	// this.ccCliente = ccCliente;
+	// }
+	//
+	// private int tipo;
+	//
+	// public int getTipo() {
+	// return tipo;
+	// }
+	//
+	// public void setTipo(int tipo) {
+	// this.tipo = tipo;
+	// }
 
 	private List<Cliente> TipoConsulta() {
 		List<Cliente> lstTibus = new ArrayList<Cliente>();
@@ -55,24 +72,99 @@ public class ClienteController {
 		return lstTibus;
 	}
 
+	// model.addAttribute("lstCustomer", null);
+	// model.addAttribute("ccCliente", this.ccCliente);
+	// model.addAttribute("tipo", this.tipo);
+	// model.addAttribute("lstTibus", TipoConsulta());
 	@RequestMapping(value = "/clienteben", method = RequestMethod.GET)
 	public String buscarClientes(Model model) {
-		model.addAttribute("lstCustomer", null);
-		model.addAttribute("ccCliente", this.ccCliente);
-		model.addAttribute("tipo", this.tipo);
-		model.addAttribute("lstTibus", TipoConsulta());
+		model.addAttribute("urlfile", this.urlfile);
+
 		return "clientes";
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String clientes(@RequestParam String ccCliente,
-			@RequestParam int tipo, Model model) {
-		model.addAttribute("myname", "Luis Bellido");
-		List<Cliente> lstCustomer = clienteService.getCustomer(ccCliente, tipo);// "P000236525"
-		model.addAttribute("lstCustomer", lstCustomer);
-		model.addAttribute("lstTibus", TipoConsulta());
+	private String repeat(String cad, int veces) {
+		String rpta = "";
+		for (int c = 0; c < veces; c++) {
+			rpta = rpta + cad;
+		}
+		return rpta;
+	}
+	Vector<Aporte> filas;
+	@RequestMapping(method = RequestMethod.POST,params={"accion=cargar"})
+	public String clientes(Model model,@RequestParam MultipartFile urlfile) {
+		Vector<String> lst = LeerArchivo(urlfile);
+		String[] arrayColumns = lst.get(0).split(";");
+		int columncount = arrayColumns.length;
+		Vector<String> columnas = new Vector<String>();
+		for (String col : arrayColumns) {
+			columnas.add(col);
+		}
+		//System.out.print(repeat("0", 5));
+		model.addAttribute("xcolumnas", columnas);
+		filas= new Vector<Aporte>();
+		filas.clear();
+		int tamaniocip = 8;
+		int tamaniocodofin = 9;
+		for (int x = 1; x < lst.size(); x++) {
+			String[] arrayRow = lst.get(x).split(";");
+			Aporte aporte = new Aporte();
+			String cip = arrayRow[0];
+			String codofin = arrayRow[1];
+			aporte.setCtcip(repeat("0", tamaniocip - cip.length()) + cip);
+			aporte.setCtcodofin(repeat("0", tamaniocodofin - codofin.length())
+					+ codofin);
+			aporte.setCtcliente(arrayRow[2]);
+			aporte.setNimonto(Double.parseDouble((arrayRow[3])
+					.replace(',', '.')));
+			aporte.setNianhio(arrayRow[4]);
+			filas.add(aporte);
+		}
+		model.addAttribute("xfilas", filas);
 		return "clientes";
 	}
 	
-	
+	@RequestMapping(method = RequestMethod.POST,params={"accion=procesar"})
+	public String procesar(Model model ) {
+		//@ModelAttribute("xfilas") Vector<Aporte> fila
+		for(Aporte aporte:filas){
+			System.out.println("CIP: "+aporte.getCtcip());
+		}
+		return "clientes";
+	}
+
+	public Vector<String> LeerArchivo(MultipartFile file) {
+		BufferedReader br = null;
+		Vector<String> lineas = new Vector<String>();
+		try {
+			br = new BufferedReader(
+					new InputStreamReader(file.getInputStream()));
+			String linea;
+			// int i=0;
+			while ((linea = br.readLine()) != null) {
+				// i++;
+				lineas.add(linea);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return lineas;
+	}
+
+	private MultipartFile urlfile;
+
+	public MultipartFile getUrlfile() {
+		return urlfile;
+	}
+
+	public void setUrlfile(MultipartFile urlfile) {
+		this.urlfile = urlfile;
+	}
+
 }
