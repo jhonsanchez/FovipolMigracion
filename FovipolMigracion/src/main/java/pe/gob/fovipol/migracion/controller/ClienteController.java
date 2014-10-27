@@ -105,7 +105,8 @@ public class ClienteController {
 		    ap.setCtcip(aporte.getCtcip());
 		    ap.setCtcodofin(aporte.getCtcodofin());
 		    ap.setNimonto(aporte.getNimonto());
-		    ap.setNianhio(aporte.getNianhio());
+		    String anio=ap.getNianhio().substring(2,4);
+		    ap.setNianhio("20"+anio);
 		    int rpta=clienteService.getUpdateAportes(ap);
 		    System.out.println(rpta);
 		}

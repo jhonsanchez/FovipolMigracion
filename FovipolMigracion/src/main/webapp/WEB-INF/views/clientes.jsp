@@ -91,8 +91,9 @@
 			</div>
 			<div>
 				<form method="POST" enctype="multipart/form-data" id="searchForm">
-					<input name="urlfile" class="f1 easyui-filebox"> 
+					<input name="urlfile" class="f1 easyui-filebox" style="width: 500px">
 					<input type="hidden" name="accion" id="accion" />
+					<br>
 					<input type="button" class="easyui-linkbutton" id="cargar" value="Cargar">
 					<input type="button" class="easyui-linkbutton" id="procesar" value="Procesar">
 					<table border="1">

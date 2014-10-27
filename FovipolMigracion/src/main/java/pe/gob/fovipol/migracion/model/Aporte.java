@@ -55,5 +55,12 @@ public class Aporte {
 	public void setNimonto(Double nimonto) {
 		this.nimonto = nimonto;
 	}
+
+	@Override
+	public String toString() {
+		return "Aporte [ctcliente=" + ctcliente + ", ctcip=" + ctcip
+				+ ", ctcodofin=" + ctcodofin + ", cccliente=" + cccliente
+				+ ", nianhio=" + nianhio + ", nimonto=" + nimonto + "]";
+	}
 	
 }
