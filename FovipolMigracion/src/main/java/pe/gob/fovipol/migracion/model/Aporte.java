@@ -9,6 +9,12 @@ public class Aporte {
 	private String nianhio;
 	private Double nimonto;
 	
+	public Aporte(String ctcip,String ctcliente) {
+		super();
+		this.ctcip = ctcip;
+		this.ctcliente = ctcliente;
+	}
+
 	public Aporte() {
 		// TODO Auto-generated constructor stub
 	}

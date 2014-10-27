@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.gob.fovipol.migracion.mapper.ClienteMapper;
+import pe.gob.fovipol.migracion.model.Aporte;
 import pe.gob.fovipol.migracion.model.Cliente;
 import pe.gob.fovipol.migracion.model.Usuario;
 
@@ -30,6 +31,11 @@ public class ClienteServiceImpl implements ClienteService{
 		params.put("TIPO", tipo);
 		clientMapper.getCustomer(params);
 		return ((ArrayList<Cliente>)params.get("my_cursorcustomer")); 
+	}
+
+	@Override
+	public int getUpdateAportes(Aporte aporte) {
+		return clientMapper.getUpdateAportes(aporte);
 	}
 
 }

@@ -39,10 +39,11 @@ public class HomeController {
 		String formattedDate = dateFormat.format(date);
 		
 		model.addAttribute("serverTime", formattedDate );
-		List<Usuario> usuarioList = usuarioService.getEmployees();
-    	for(Usuario usuario:usuarioList){
-    		System.out.println(usuario.toString());
-    	}
+//		List<Usuario> usuarioList = usuarioService.getEmployees();
+//    	for(Usuario usuario:usuarioList){
+//    		System.out.println(usuario.toString());
+//    	}
+    	
 		return "home";
 	}
 	

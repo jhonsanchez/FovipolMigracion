@@ -29,19 +29,38 @@
 }
 </style>
 <script type="text/javascript">
-$(function() {
-	//alert("as");
-	$("#cargar").click(function( event ) {
-		$("#accion").val("cargar");
-		//$(this).submit();
-		$("#searchForm").submit();
+	$(function() {
+		$("#cargar").click(function(event) {
+			$("#accion").val("cargar");
+			$("#searchForm").submit();
+		});
+
+		$("#procesar").click(function(event) {
+			$("#accion").val("procesar");
+			$("#searchForm").submit();
+		});
 	});
-	$("#procesar").click(function( event ) {
-		$("#accion").val("procesar");
-		//$(this).submit();
-		$("#searchForm").submit();
-	});
-});
+
+	function CargarAportes() {
+		$('#tblAportes').datagrid({
+			title : 'Aportes Cargados',
+			rownumbers : true,
+			remoteSort : false,
+			nowrap : false,
+			fitColumns : true,
+			singleSelect : true,
+			collapsible : true,
+			method : 'get',
+			url : '/fovipol/aportescargados',
+			columns : [ [ 
+			{field : 'ctcip',title : 'CIP',width : 80,sortable : true}, 
+			{field : 'ctcliente',title : 'CODOFIN',width : 100,align : 'left',sortable : true}
+			] ],
+			onDblClickRow : function() {
+				//getSelectedRowTable();
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -72,27 +91,29 @@ $(function() {
 			</div>
 			<div>
 				<form method="POST" enctype="multipart/form-data" id="searchForm">
-					<input type="file" name="urlfile"> <input type="button" id="cargar"
-						value="Cargar">
+					<input name="urlfile" class="f1 easyui-filebox"> 
+					<input type="hidden" name="accion" id="accion" />
+					<input type="button" class="easyui-linkbutton" id="cargar" value="Cargar">
+					<input type="button" class="easyui-linkbutton" id="procesar" value="Procesar">
 					<table border="1">
 						<tr>
 							<c:forEach items="${xcolumnas}" var="columna">
 								<td>${columna}</td>
 							</c:forEach>
 						</tr>
-							<c:forEach items="${xfilas}" var="fila">
-								<tr>
-									<td>${fila.ctcip}</td>
-									<td>${fila.ctcodofin}</td>
-									<td>${fila.ctcliente}</td>
-									<td>${fila.nimonto}</td>
-									<td>${fila.nianhio}</td>
-								</tr>
-							</c:forEach>
-					</table>
-					<input type="button" id="procesar" value="Procesar">
-					<input type="hidden" name="accion"  id="accion"/>
+						<c:forEach items="${xfilas}" var="fila">
+							<tr>
+								<td>${fila.ctcip}</td>
+								<td>${fila.ctcodofin}</td>
+								<td>${fila.ctcliente}</td>
+								<td>${fila.nimonto}</td>
+								<td>${fila.nianhio}</td>
+							</tr>
+						</c:forEach>
+					</table>					
 				</form>
+				<hr>
+<!-- 				<table id="tblAportes" class="easyui-datagrid" style="width: 100%; height: 250px"></table> -->
 			</div>
 			<div>
 				<input type="text">
