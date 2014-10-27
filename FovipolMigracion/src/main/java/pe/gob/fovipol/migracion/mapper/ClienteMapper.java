@@ -16,10 +16,14 @@ public interface ClienteMapper {
 			+ "#{P_C_C_CLIENTE,mode=IN,javaType=string},#{TIPO,mode=IN,javaType=int}) }")
 	@Options(statementType = StatementType.CALLABLE)
 	public Object getCustomer(Map<String, Object> params);
-
-	@Update("UPDATE S10APOACT SET N_N_APORTEE07=#{nimonto}"
-			+ "WHERE C_C_CLIENTE=(SELECT CL.C_C_CLIENTE "
-			+ "FROM S10CLI CL WHERE CL.C_T_CIP=#{ctcip} AND  CL.C_T_CODOFIN=#{ctcodofin}) "
-			+ "AND N_I_ANHIO = #{nianhio}")
-	public int getUpdateAportes(Aporte aporte);
+			 
+	@Select("{call SAB.sp_updateAporteMasivo("
+			+ "#{nomcolumnames,mode=IN,javaType=string},"
+			+ "#{nimonto,mode=IN,javaType=double},"
+			+ "#{nianhio,mode=IN,javaType=int},"
+			+ "#{ctcip,mode=IN,javaType=string},"
+			+ "#{ctcodofin,mode=IN,javaType=string}"
+			+ ")}")
+	@Options(statementType = StatementType.CALLABLE)
+	public void getUpdateAportes(Aporte aporte);
 }

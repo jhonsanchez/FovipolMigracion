@@ -34,8 +34,8 @@ public class ClienteServiceImpl implements ClienteService{
 	}
 
 	@Override
-	public int getUpdateAportes(Aporte aporte) {
-		return clientMapper.getUpdateAportes(aporte);
+	public void getUpdateAportes(Aporte aporte) {
+		clientMapper.getUpdateAportes(aporte);
 	}
 
 }

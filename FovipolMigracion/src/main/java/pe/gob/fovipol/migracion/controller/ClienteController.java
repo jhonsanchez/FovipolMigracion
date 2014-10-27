@@ -91,24 +91,45 @@ public class ClienteController {
 			aporte.setCtcliente(arrayRow[2]);
 			aporte.setNimonto(Double.parseDouble((arrayRow[3])
 					.replace(',', '.')));
-			aporte.setNianhio(arrayRow[4]);
+			aporte.setNifecha(arrayRow[4]);
 			filas.add(aporte);
 		}
 		model.addAttribute("xfilas", filas);
 		return "clientes";
 	}
 	
+	public Map<Integer, String> MesAporte(char tipo) {
+        Map<Integer, String> mp = new HashMap<Integer, String>();
+        mp.put(1, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "01");
+        mp.put(2, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "02");
+        mp.put(3, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "03");
+        mp.put(4, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "04");
+        mp.put(5, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "05");
+        mp.put(6, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "06");
+        mp.put(7, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "07");
+        mp.put(8, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "08");
+        mp.put(9, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "09");
+        mp.put(10, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "10");
+        mp.put(11, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "11");
+        mp.put(12, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "12");
+        return mp;
+    }
+	
 	@RequestMapping(method = RequestMethod.POST,params={"accion=procesar"})
 	public String procesar(Model model ) {
 		for(Aporte aporte:filas){
 		    Aporte ap=new Aporte();
+		    String anio=aporte.getNifecha().substring(2,4);
+		    int mes=Integer.parseInt(aporte.getNifecha().substring(0,2));
 		    ap.setCtcip(aporte.getCtcip());
 		    ap.setCtcodofin(aporte.getCtcodofin());
 		    ap.setNimonto(aporte.getNimonto());
-		    String anio=ap.getNianhio().substring(2,4);
-		    ap.setNianhio("20"+anio);
-		    int rpta=clienteService.getUpdateAportes(ap);
-		    System.out.println(rpta);
+		    ap.setNianhio(Integer.parseInt("20"+anio));
+		    Map<Integer, String> val = MesAporte('E');
+		    ap.setNomcolumnames(val.get(mes));
+		    //int rpta=
+		    clienteService.getUpdateAportes(ap);
+		    //System.out.println(rpta);
 		}
 		return "clientes";
 	}

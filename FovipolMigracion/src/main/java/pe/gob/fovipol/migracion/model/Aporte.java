@@ -6,8 +6,10 @@ public class Aporte {
 	private String ctcip;
 	private String ctcodofin;
 	private String cccliente;
-	private String nianhio;
+	private String nifecha;
+	private Integer nianhio;
 	private Double nimonto;
+	private String nomcolumnames;
 	
 	public Aporte(String ctcip,String ctcliente) {
 		super();
@@ -43,10 +45,10 @@ public class Aporte {
 	public void setCccliente(String cccliente) {
 		this.cccliente = cccliente;
 	}
-	public String getNianhio() {
+	public Integer getNianhio() {
 		return nianhio;
 	}
-	public void setNianhio(String nianhio) {
+	public void setNianhio(Integer nianhio) {
 		this.nianhio = nianhio;
 	}
 	public Double getNimonto() {
@@ -54,6 +56,22 @@ public class Aporte {
 	}
 	public void setNimonto(Double nimonto) {
 		this.nimonto = nimonto;
+	}
+	
+	public String getNomcolumnames() {
+		return nomcolumnames;
+	}
+
+	public void setNomcolumnames(String nomcolumnames) {
+		this.nomcolumnames = nomcolumnames;
+	}
+
+	public String getNifecha() {
+		return nifecha;
+	}
+
+	public void setNifecha(String nifecha) {
+		this.nifecha = nifecha;
 	}
 
 	@Override
