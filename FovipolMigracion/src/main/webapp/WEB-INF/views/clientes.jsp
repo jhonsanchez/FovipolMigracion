@@ -52,10 +52,18 @@
 			collapsible : true,
 			method : 'get',
 			url : '/fovipol/aportescargados',
-			columns : [ [ 
-			{field : 'ctcip',title : 'CIP',width : 80,sortable : true}, 
-			{field : 'ctcliente',title : 'CODOFIN',width : 100,align : 'left',sortable : true}
-			] ],
+			columns : [ [ {
+				field : 'ctcip',
+				title : 'CIP',
+				width : 80,
+				sortable : true
+			}, {
+				field : 'ctcliente',
+				title : 'CODOFIN',
+				width : 100,
+				align : 'left',
+				sortable : true
+			} ] ],
 			onDblClickRow : function() {
 				//getSelectedRowTable();
 			}
@@ -91,15 +99,23 @@
 			</div>
 			<div>
 				<form method="POST" enctype="multipart/form-data" id="searchForm">
-					<input name="urlfile" class="f1 easyui-filebox" style="width: 500px">
-					<input type="hidden" name="accion" id="accion" />
-					<br>
-					<input type="button" class="easyui-linkbutton" id="cargar" value="Cargar">
-					<input type="button" class="easyui-linkbutton" id="procesar" value="Procesar">
+					<input name="urlfile" class="f1 easyui-filebox"
+						style="width: 500px"> <input type="hidden" name="accion"
+						id="accion" />
+						<select name="tipo">
+							<option value="E">Estado</option>
+							<option value="T">Titular</option>
+						</select>
+						<br> <input type="button"
+						class="easyui-linkbutton" id="cargar" value="Cargar"> <input
+						type="button" class="easyui-linkbutton" id="procesar"
+						value="Procesar">
+						<input type="button" class="easyui-linkbutton" id="exportar" 
+						data-options="iconCls:'icon-print'" value="Exportar">
 					<table border="1">
 						<tr>
 							<c:forEach items="${xcolumnas}" var="columna">
-								<td>${columna}</td>
+								<th>${columna}</th>
 							</c:forEach>
 						</tr>
 						<c:forEach items="${xfilas}" var="fila">
@@ -108,16 +124,31 @@
 								<td>${fila.ctcodofin}</td>
 								<td>${fila.ctcliente}</td>
 								<td>${fila.nimonto}</td>
-								<td>${fila.nianhio}</td>
+								<td>${fila.nifecha}</td>
 							</tr>
 						</c:forEach>
-					</table>					
+					</table>
 				</form>
 				<hr>
-<!-- 				<table id="tblAportes" class="easyui-datagrid" style="width: 100%; height: 250px"></table> -->
+				<!-- 				<table id="tblAportes" class="easyui-datagrid" style="width: 100%; height: 250px"></table> -->
 			</div>
 			<div>
-				<input type="text">
+				<table border="1">
+					<tr>
+					<c:forEach items="${xcolumnasnot}" var="columna">
+								<th>${columna}</th>
+					</c:forEach>
+					</tr>
+					<c:forEach items="${xlstaportenot}" var="fila">
+						<tr>
+							<td>${fila.ctcip}</td>
+							<td>${fila.ctcodofin}</td>
+							<td>${fila.ctcliente}</td>
+							<td>${fila.nimonto}</td>
+							<td>${fila.nifecha}</td>
+						</tr>
+					</c:forEach>
+				</table>
 			</div>
 		</div>
 		<div id="footer"></div>

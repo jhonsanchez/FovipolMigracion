@@ -10,6 +10,7 @@ public class Aporte {
 	private Integer nianhio;
 	private Double nimonto;
 	private String nomcolumnames;
+	private Integer rptaquery;
 	
 	public Aporte(String ctcip,String ctcliente) {
 		super();
@@ -74,11 +75,20 @@ public class Aporte {
 		this.nifecha = nifecha;
 	}
 
+	public Integer getRptaquery() {
+		return rptaquery;
+	}
+
+	public void setRptaquery(Integer rptaquery) {
+		this.rptaquery = rptaquery;
+	}
+
 	@Override
 	public String toString() {
 		return "Aporte [ctcliente=" + ctcliente + ", ctcip=" + ctcip
 				+ ", ctcodofin=" + ctcodofin + ", cccliente=" + cccliente
 				+ ", nianhio=" + nianhio + ", nimonto=" + nimonto + "]";
 	}
+	
 	
 }

@@ -51,6 +51,7 @@ public class ClienteController {
 	@RequestMapping(value = "/clienteben", method = RequestMethod.GET)
 	public String buscarClientes(Model model) {
 		model.addAttribute("urlfile", this.urlfile);
+		model.addAttribute("tipo", this.tipo);
 		return "clientes";
 	}
 
@@ -61,22 +62,24 @@ public class ClienteController {
 		}
 		return rpta;
 	}
-	
+
 	Vector<Aporte> filas;
-	@RequestMapping(method = RequestMethod.POST,params={"accion=cargar"})
-	public String clientes(Model model,@RequestParam MultipartFile urlfile) {
+	Vector<String> columnas;
+
+	@RequestMapping(method = RequestMethod.POST, params = { "accion=cargar" })
+	public String clientes(Model model, @RequestParam MultipartFile urlfile) {
 		Vector<String> lst = LeerArchivo(urlfile);
-		//System.out.print(repeat("0", 5));
+		// System.out.print(repeat("0", 5));
 		String[] arrayColumns = lst.get(0).split(";");
-		
+
 		int columncount = arrayColumns.length;
-		Vector<String> columnas = new Vector<String>();
+		columnas = new Vector<String>();
 		for (String col : arrayColumns) {
 			columnas.add(col);
 		}
-		//System.out.print(repeat("0", 5));
+		// System.out.print(repeat("0", 5));
 		model.addAttribute("xcolumnas", columnas);
-		filas= new Vector<Aporte>();
+		filas = new Vector<Aporte>();
 		filas.clear();
 		int tamaniocip = 8;
 		int tamaniocodofin = 9;
@@ -97,85 +100,82 @@ public class ClienteController {
 		model.addAttribute("xfilas", filas);
 		return "clientes";
 	}
-	
+
 	public Map<Integer, String> MesAporte(char tipo) {
-        Map<Integer, String> mp = new HashMap<Integer, String>();
-        mp.put(1, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "01");
-        mp.put(2, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "02");
-        mp.put(3, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "03");
-        mp.put(4, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "04");
-        mp.put(5, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "05");
-        mp.put(6, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "06");
-        mp.put(7, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "07");
-        mp.put(8, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "08");
-        mp.put(9, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "09");
-        mp.put(10, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "10");
-        mp.put(11, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "11");
-        mp.put(12, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "12");
-        return mp;
-    }
-	
-	@RequestMapping(method = RequestMethod.POST,params={"accion=procesar"})
-	public String procesar(Model model ) {
-		for(Aporte aporte:filas){
-		    Aporte ap=new Aporte();
-		    String anio=aporte.getNifecha().substring(2,4);
-		    int mes=Integer.parseInt(aporte.getNifecha().substring(0,2));
-		    ap.setCtcip(aporte.getCtcip());
-		    ap.setCtcodofin(aporte.getCtcodofin());
-		    ap.setNimonto(aporte.getNimonto());
-		    ap.setNianhio(Integer.parseInt("20"+anio));
-		    Map<Integer, String> val = MesAporte('E');
-		    ap.setNomcolumnames(val.get(mes));
-		    //int rpta=
-		    clienteService.getUpdateAportes(ap);
-		    //System.out.println(rpta);
+		Map<Integer, String> mp = new HashMap<Integer, String>();
+		mp.put(1, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "01");
+		mp.put(2, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "02");
+		mp.put(3, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "03");
+		mp.put(4, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "04");
+		mp.put(5, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "05");
+		mp.put(6, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "06");
+		mp.put(7, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "07");
+		mp.put(8, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "08");
+		mp.put(9, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "09");
+		mp.put(10, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "10");
+		mp.put(11, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "11");
+		mp.put(12, "N_N_APORTE" + (tipo == 'E' ? "E" : "") + "12");
+		return mp;
+	}
+
+	Vector<Aporte> lstaportenot;
+
+	@RequestMapping(method = RequestMethod.POST, params = { "accion=procesar" })
+	public String procesar(Model model, @RequestParam char tipo) {
+		lstaportenot = new Vector<Aporte>();
+		for (Aporte aporte : filas) {
+			Aporte ap = new Aporte();
+			String anio = aporte.getNifecha().substring(2, 4);
+			int mes = Integer.parseInt(aporte.getNifecha().substring(0, 2));
+			ap.setCtcip(aporte.getCtcip());
+			ap.setCtcodofin(aporte.getCtcodofin());
+			ap.setNimonto(aporte.getNimonto());
+			ap.setNianhio(Integer.parseInt("20" + anio));
+			Map<Integer, String> val = MesAporte(tipo);
+			ap.setNomcolumnames(val.get(mes));
+			int rpta = clienteService.getUpdateAportes(ap);
+			// System.out.println(rpta);
+			if (rpta < 1) {
+				Aporte aponot = new Aporte();
+				aponot.setCtcip(aporte.getCtcip());
+				aponot.setCtcodofin(aporte.getCtcodofin());
+				aponot.setCtcliente(aporte.getCtcliente());
+				aponot.setNimonto(aporte.getNimonto());
+				aponot.setNifecha(aporte.getNifecha());
+				lstaportenot.add(aponot);
+			}
 		}
+		model.addAttribute("xlstaportenot", lstaportenot);
+		model.addAttribute("xcolumnasnot", columnas);
 		return "clientes";
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	@RequestMapping(value = "/aportescargados2",method = RequestMethod.GET,headers="Accept=application/json")
-//	@ResponseBody
-//	public Vector<Aporte>GetAportes2(){
-//		Vector<Aporte>lst=new Vector<Aporte>();
-//		lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
-//		lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
-//		lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
-//		lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
-//		lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
-//		lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
-//		lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
-//		lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
-//		lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
-//		lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
-//		lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
-//		lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
-//		return lst;
-//	}
-//	@RequestMapping(value = "/aportescargados",method = RequestMethod.GET,headers="Accept=application/json")
-//	@ResponseBody
-//	public Vector<Aporte>GetAportes(){
-//		return this.filas;
-//	}
-	
-	
+	// @RequestMapping(value = "/aportescargados2",method =
+	// RequestMethod.GET,headers="Accept=application/json")
+	// @ResponseBody
+	// public Vector<Aporte>GetAportes2(){
+	// Vector<Aporte>lst=new Vector<Aporte>();
+	// lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
+	// lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
+	// lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
+	// lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
+	// lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
+	// lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
+	// lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
+	// lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
+	// lst.add(new Aporte("00013765", "AMOROS VASQUEZ,FERNANDO"));
+	// lst.add(new Aporte("00054525", "CELIS SANTA CRUZ, MAXIMO"));
+	// lst.add(new Aporte("00061575", "CHICLOTE VALDEZ,ALBERTO"));
+	// lst.add(new Aporte("00067935", "CORDOVA RUBINA,GLADYS LUCRECIA"));
+	// return lst;
+	// }
+	// @RequestMapping(value = "/aportescargados",method =
+	// RequestMethod.GET,headers="Accept=application/json")
+	// @ResponseBody
+	// public Vector<Aporte>GetAportes(){
+	// return this.filas;
+	// }
+
 	public Vector<String> LeerArchivo(MultipartFile file) {
 		BufferedReader br = null;
 		Vector<String> lineas = new Vector<String>();
@@ -200,14 +200,25 @@ public class ClienteController {
 		return lineas;
 	}
 
-	//GET AND SET
+	// GET AND SET
 	private MultipartFile urlfile;
 
 	public MultipartFile getUrlfile() {
 		return urlfile;
 	}
+
 	public void setUrlfile(MultipartFile urlfile) {
 		this.urlfile = urlfile;
+	}
+
+	private char tipo;
+
+	public char getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(char tipo) {
+		this.tipo = tipo;
 	}
 
 }

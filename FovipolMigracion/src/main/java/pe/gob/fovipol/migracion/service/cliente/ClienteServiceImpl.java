@@ -34,8 +34,15 @@ public class ClienteServiceImpl implements ClienteService{
 	}
 
 	@Override
-	public void getUpdateAportes(Aporte aporte) {
-		clientMapper.getUpdateAportes(aporte);
+	public int getUpdateAportes(Aporte aporte) {
+		Map<String, Object> params= new HashMap<String,Object>();
+		params.put("nomcolumnames", aporte.getNomcolumnames());
+		params.put("nimonto", aporte.getNimonto());
+		params.put("nianhio", aporte.getNianhio());
+		params.put("ctcip", aporte.getCtcip());
+		params.put("ctcodofin", aporte.getCtcodofin());
+		clientMapper.getUpdateAportes(params);
+		return ((Integer)params.get("rptaquery"));
 	}
 
 }
