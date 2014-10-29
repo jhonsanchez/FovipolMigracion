@@ -45,4 +45,22 @@ public class ClienteServiceImpl implements ClienteService{
 		return ((Integer)params.get("rptaquery"));
 	}
 
+	@Override
+	public Cliente getCustomerDet(Cliente cliente) {
+		return clientMapper.getCustomerDet(cliente);
+	}
+
+	@Override
+	public Cliente getTotalBen(Cliente cliente) {
+		return clientMapper.getTotalBen(cliente);
+	}
+	
+	@Override
+	public void getTraspasaAporte(String codben, String codtit) {
+		Map<String, Object> params= new HashMap<String,Object>();
+		params.put("pcodben",codben);
+		params.put("pcodtit",codtit);
+		clientMapper.getTraspasaAporte(params);
+	}
+	
 }

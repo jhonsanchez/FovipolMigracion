@@ -4,11 +4,13 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.mapping.StatementType;
 
 import pe.gob.fovipol.migracion.model.Aporte;
+import pe.gob.fovipol.migracion.model.Cliente;
 
 public interface ClienteMapper {
 
@@ -27,5 +29,15 @@ public interface ClienteMapper {
 			+ ")}")
 	@Options(statementType = StatementType.CALLABLE)
 	public void getUpdateAportes(Map<String, Object> params);
+
+	@Select("SELECT C.C_C_CLIENTE AS codicl,C.C_T_CLIENTE AS nococl FROM S10CLI C WHERE C.C_T_CIP=#{ciptcl} OR C.C_T_CODOFIN=#{coficl}")
+    public Cliente getCustomerDet(Cliente cliente);
+	
+	@Select("SELECT COUNT(*)AS total FROM S10CLIBEN WHERE C_C_CLIENTE=#{codtit}")
+	public Cliente getTotalBen(Cliente cliente);
+	
+	@Select("{call SAB.SP_TRASPASARAPORTES(#{pcodben,mode=IN,javaType=string},#{pcodtit,mode=IN,javaType=string})}")
+	@Options(statementType = StatementType.CALLABLE)
+	public void getTraspasaAporte(Map<String, Object> params);
 	
 }

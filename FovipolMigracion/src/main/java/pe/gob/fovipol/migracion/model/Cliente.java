@@ -1,13 +1,17 @@
 package pe.gob.fovipol.migracion.model;
 
 public class Cliente {
+	
 	private String codicl;
 	private String ciptcl;
 	private String nococl;//Nombre completo
 	private String nudocl;//Numero de documento
 	private String direcl;
 	private String telfcl;
-	
+	private String coficl;
+	private String codben;
+	private String codtit;
+	private int total;
 	
 	
 	public Cliente(String codicl, String ciptcl) {
@@ -15,6 +19,7 @@ public class Cliente {
 		this.codicl = codicl;
 		this.ciptcl = ciptcl;
 	}
+	
 	public Cliente(String codicl, String ciptcl, String nococl, String nudocl,
 			String direcl, String telfcl) {
 		super();
@@ -66,11 +71,38 @@ public class Cliente {
 		this.telfcl = telfcl;
 	}
 
+	public String getCoficl() {
+		return coficl;
+	}
+	public void setCoficl(String coficl) {
+		this.coficl = coficl;
+	}
+		
+	public String getCodben() {
+		return codben;
+	}
+	public void setCodben(String codben) {
+		this.codben = codben;
+	}
+	public String getCodtit() {
+		return codtit;
+	}
+	public void setCodtit(String codtit) {
+		this.codtit = codtit;
+	}
 	@Override
 	public String toString() {
 		return "Cliente [codicl=" + codicl + ", ciptcl=" + ciptcl + ", nococl="
 				+ nococl + ", nudocl=" + nudocl + ", direcl=" + direcl
 				+ ", telfcl=" + telfcl + "]";
 	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	
+	
 	
 }

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import pe.gob.fovipol.migracion.model.Aporte;
 import pe.gob.fovipol.migracion.model.Cliente;
@@ -63,41 +64,74 @@ public class ClienteController {
 		return rpta;
 	}
 
+	@RequestMapping(value = "/getTitu", method = RequestMethod.POST)
+	@ResponseBody
+	public String getSaludo(@RequestParam String pcip,
+			@RequestParam String pcodofin) {
+		Cliente para = new Cliente();
+		para.setCiptcl(pcip);
+		para.setCoficl(pcodofin);
+		Cliente cliente = clienteService.getCustomerDet(para);
+		return cliente != null ? cliente.getCodicl() + ";"
+				+ cliente.getNococl() : "";
+	}
+
+	//getTotalBen
+	@RequestMapping(value = "/getVereficaBene", method = RequestMethod.POST)
+	@ResponseBody
+	public int getVereficaBene(@RequestParam String pcodtit){
+		Cliente para = new Cliente();
+		para.setCodtit(pcodtit);
+		Cliente cliente = clienteService.getTotalBen(para);
+		return cliente.getTotal();
+	}
+	
+	@RequestMapping(value = "/getTraspasar", method = RequestMethod.POST)
+	@ResponseBody
+	public String getTraspaso(@RequestParam String pcodben,
+			@RequestParam String pcodtit) {
+		clienteService.getTraspasaAporte(pcodben, pcodtit);
+		return "ok";
+	}
+
 	Vector<Aporte> filas;
 	Vector<String> columnas;
 
 	@RequestMapping(method = RequestMethod.POST, params = { "accion=cargar" })
 	public String clientes(Model model, @RequestParam MultipartFile urlfile) {
 		Vector<String> lst = LeerArchivo(urlfile);
-		// System.out.print(repeat("0", 5));
-		String[] arrayColumns = lst.get(0).split(";");
+		if (lst.size() > 0) {
+			// System.out.print(repeat("0", 5));
+			String[] arrayColumns = lst.get(0).split(";");
 
-		int columncount = arrayColumns.length;
-		columnas = new Vector<String>();
-		for (String col : arrayColumns) {
-			columnas.add(col);
+			int columncount = arrayColumns.length;
+			columnas = new Vector<String>();
+			for (String col : arrayColumns) {
+				columnas.add(col);
+			}
+			// System.out.print(repeat("0", 5));
+			model.addAttribute("xcolumnas", columnas);
+			filas = new Vector<Aporte>();
+			filas.clear();
+			int tamaniocip = 8;
+			int tamaniocodofin = 9;
+			for (int x = 1; x < lst.size(); x++) {
+				String[] arrayRow = lst.get(x).split(";");
+				Aporte aporte = new Aporte();
+				String cip = arrayRow[0];
+				String codofin = arrayRow[1];
+				aporte.setCtcip(repeat("0", tamaniocip - cip.length()) + cip);
+				aporte.setCtcodofin(repeat("0",
+						tamaniocodofin - codofin.length())
+						+ codofin);
+				aporte.setCtcliente(arrayRow[2]);
+				aporte.setNimonto(Double.parseDouble((arrayRow[3]).replace(',',
+						'.')));
+				aporte.setNifecha(arrayRow[4]);
+				filas.add(aporte);
+			}
+			model.addAttribute("xfilas", filas);
 		}
-		// System.out.print(repeat("0", 5));
-		model.addAttribute("xcolumnas", columnas);
-		filas = new Vector<Aporte>();
-		filas.clear();
-		int tamaniocip = 8;
-		int tamaniocodofin = 9;
-		for (int x = 1; x < lst.size(); x++) {
-			String[] arrayRow = lst.get(x).split(";");
-			Aporte aporte = new Aporte();
-			String cip = arrayRow[0];
-			String codofin = arrayRow[1];
-			aporte.setCtcip(repeat("0", tamaniocip - cip.length()) + cip);
-			aporte.setCtcodofin(repeat("0", tamaniocodofin - codofin.length())
-					+ codofin);
-			aporte.setCtcliente(arrayRow[2]);
-			aporte.setNimonto(Double.parseDouble((arrayRow[3])
-					.replace(',', '.')));
-			aporte.setNifecha(arrayRow[4]);
-			filas.add(aporte);
-		}
-		model.addAttribute("xfilas", filas);
 		return "clientes";
 	}
 
@@ -134,7 +168,7 @@ public class ClienteController {
 			Map<Integer, String> val = MesAporte(tipo);
 			ap.setNomcolumnames(val.get(mes));
 			int rpta = clienteService.getUpdateAportes(ap);
-			// System.out.println(rpta);
+			System.out.println(rpta);
 			if (rpta < 1) {
 				Aporte aponot = new Aporte();
 				aponot.setCtcip(aporte.getCtcip());
@@ -175,6 +209,12 @@ public class ClienteController {
 	// public Vector<Aporte>GetAportes(){
 	// return this.filas;
 	// }
+	// value = "/export", method = RequestMethod.GET
+	@RequestMapping(method = RequestMethod.POST, params = { "accion=exportar" })
+	public ModelAndView getExcel() {
+		// List<Animal> animalList = animalService.getAnimalList();
+		return new ModelAndView("AnimalListExcel", "clienteben", filas);
+	}
 
 	public Vector<String> LeerArchivo(MultipartFile file) {
 		BufferedReader br = null;
