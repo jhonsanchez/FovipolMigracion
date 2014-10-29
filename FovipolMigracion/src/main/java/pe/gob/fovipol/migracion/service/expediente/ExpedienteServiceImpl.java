@@ -21,4 +21,11 @@ public class ExpedienteServiceImpl implements ExpedienteService{
 		return ((ArrayList<Expediente>)params.get("my_cursor"));
 	}
 
+	@Override
+	public int getAnularExpediente(String codexpediente) {
+		Map<String, Object> params= new HashMap<String,Object>();
+		params.put("p_ccexpediente", codexpediente);
+		expedienteMapper.getAnularExpediente(params);
+		return ((Integer)params.get("rptaquery"));
+	}
 }
