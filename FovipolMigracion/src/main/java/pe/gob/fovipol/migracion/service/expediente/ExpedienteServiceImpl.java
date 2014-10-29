@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pe.gob.fovipol.migracion.mapper.ExpedienteMapper;
 import pe.gob.fovipol.migracion.model.Expediente;
 
+@Service("expedienteService")
 public class ExpedienteServiceImpl implements ExpedienteService{
 	@Autowired
 	private ExpedienteMapper expedienteMapper;
