@@ -1,7 +1,7 @@
 package pe.gob.fovipol.migracion.model;
 
 public class Expediente {
-	//select e.*,e.c_c_expediente,e.n_i_estado from s10exp e;
+	//COMENTARIO;
 	private String ccexpediente;
 	private Integer niestado;
 	public String getCcexpediente() {

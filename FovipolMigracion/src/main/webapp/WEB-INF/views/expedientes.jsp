@@ -16,6 +16,7 @@
 	src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
 </head>
 <body>
+<!-- //COMENTARIO; -->
 	<div class="easyui-panel" title="Anulacion de Expedientes"
 		style="width: 100%; height: 170px; padding: 5px;">
 		<form method="POST" id="searchForm">
