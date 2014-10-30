@@ -14,9 +14,21 @@
 	src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript"
 	src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	$("#procesar").click(function(event) {
+		var msg="Se procedera a anular el Expediente ingresado<br>Esta seguro de continuar?"; 
+		$.messager.confirm("Mensaje del Sistema",msg, function(r){
+			if (r){
+				$("#searchForm").submit();
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
-<!-- //COMENTARIO; -->
+	<!-- //COMENTARIO; -->
 	<div class="easyui-panel" title="Anulacion de Expedientes"
 		style="width: 100%; height: 170px; padding: 5px;">
 		<form method="POST" id="searchForm">
@@ -25,7 +37,7 @@
 				<td>Cod. Expediente</td>
 				<td><input class="easyui-textbox" type="text" id="ccexpediente"
 					name="ccexpediente" style="width: 250px; height: 25px"></td>
-				<td><input type="submit" class="easyui-linkbutton"
+				<td><input type="button" class="easyui-linkbutton"
 					id="procesar" value="Procesar"></td>
 			</tr>
 			<tr>
