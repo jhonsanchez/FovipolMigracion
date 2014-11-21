@@ -14,17 +14,28 @@
 	src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript"
 	src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+<style type="text/css">
+input {
+    text-transform:uppercase;
+}
+</style>
 <script type="text/javascript">
-$(function() {
-	$("#procesar").click(function(event) {
-		var msg="Se procedera a anular el Expediente ingresado<br>Esta seguro de continuar?"; 
-		$.messager.confirm("Mensaje del Sistema",msg, function(r){
-			if (r){
-				$("#searchForm").submit();
-			}
-		});
+	$(function() {
+		$("#procesar").click(function(event) {
+			var codexp = $("#ccexpediente").val();
+				if (codexp == '') {
+					$.messager.alert('Mensaje del Sistema','Debe ingresar el codigo de Expediente !');
+				} else {
+					var msg = "Se procedera a anular el Expediente ingresado<br>Esta seguro de continuar?";
+					$.messager.confirm("Mensaje del Sistema", msg,
+					function(r) {
+						if (r) {
+							$("#searchForm").submit();
+						}
+					});
+				}
+		 });
 	});
-});
 </script>
 </head>
 <body>
@@ -36,7 +47,9 @@ $(function() {
 			<tr>
 				<td>Cod. Expediente</td>
 				<td><input class="easyui-textbox" type="text" id="ccexpediente"
-					name="ccexpediente" style="width: 250px; height: 25px"></td>
+					name="ccexpediente" style="width: 250px; height: 25px"
+					onchange="this.value=this.value.toUpperCase();"
+					></td>
 				<td><input type="button" class="easyui-linkbutton"
 					id="procesar" value="Procesar"></td>
 			</tr>
